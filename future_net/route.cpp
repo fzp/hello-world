@@ -8,6 +8,7 @@
 #include "tarjan.h"
 #include <iostream>
 #include <stack>
+#include "DFS.h"
 
 using namespace std;
 
@@ -55,17 +56,18 @@ void fill_demand(char * demand){
 
 void fill_distance(char *topo[5000],int edge_num){
     int linkID,sourceID,destinationID,cost;
+	int useless_edge_num = 0;
     vector<string> result;
     for(int i=0;i<edge_num;i++){
         string s_topo(topo[i]);
         result = split(s_topo,",");
         sourceID = atoi(result[1].c_str());
 		if(sourceID == end_point){ 
-			edge_num--;
+			useless_edge_num++;
 			continue;}
         destinationID = atoi(result[2].c_str());
         if(destinationID == start_point){
-			edge_num--;
+			useless_edge_num++;
 			continue;}
 
         linkID = atoi(result[0].c_str());
@@ -78,21 +80,30 @@ void fill_distance(char *topo[5000],int edge_num){
 			if(costs[sourceID][destinationID] > cost){edge_num--;}
         }
     }
-	useful_edge_num = edge_num;
+	useful_edge_num = edge_num - useless_edge_num;
 }
 
 void search_route(char *topo[5000], int edge_num, char *demand){
-	bool valid;
-    unsigned short result[] = {2, 6, 3};
+	//bool valid;
+    //unsigned short result[] = {2, 6, 3};
 	init((int*)costs,MAX_VERTEX_NUM);
     fill_demand(demand);
     fill_distance(topo,edge_num);
+	DFS dfs;
+	int  VV = costs[5][19];
+	dfs.Search(start_point,end_point,costs,vertex_set,including_set);
+	for(vector<id_dis>::iterator iter=dfs.best_path.begin();iter!=dfs.best_path.end();iter++){
+		record_result(iter->id);
+	}
+	cout << "hello" << endl;
+	/*
 	Tarjan tarjan;
 	tarjan.solve(vertex_set.size(),MAX_VERTEX_NUM,(int*)costs);
 	valid = find_DAG_path(vertex_set.size(),tarjan.belong,tarjan.length);
 	if(!valid){return;}
     for (int i = 0; i < 3; i++)
         record_result(result[i]);
+		*/
 }
 
 void init(int *array,int length){

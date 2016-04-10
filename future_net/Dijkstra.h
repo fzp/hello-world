@@ -4,6 +4,7 @@
 #include <vector>
 #include <stack>
 #include "define.h"
+#include <hash_set>
 
 using namespace std;
 
@@ -17,7 +18,7 @@ using namespace std;
 			int dist[MAX_VERTEX_NUM];
 			int prev[MAX_VERTEX_NUM];
 
-			void dijkstra(int start, int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N);
+			void dijkstra(int start, int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N, hash_set<int> &valid_vertex);
 
 		private:
 			

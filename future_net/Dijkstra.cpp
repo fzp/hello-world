@@ -9,8 +9,17 @@ Dijkstra::~Dijkstra()
 {
 }
 
-void Dijkstra::dijkstra(int start, int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N)
+int find_cost(int i,int j,hash_set<int> &valid_vertex,int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM],int start){
+	if(j!= start && !valid_vertex.count(j)){
+		return MAX_COST;
+	}else{
+		return V[i][j];
+	}
+}
+
+void Dijkstra::dijkstra(int start, int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N,hash_set<int> &valid_vertex)
 {
+	int  VV = V[5][19];
 	vector<bool> s;                 //是否已经在S集合中  
 	s.reserve(0);  
 	s.assign(N, false);
@@ -18,8 +27,8 @@ void Dijkstra::dijkstra(int start, int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N)
    /*初始化dist和prev数组*/  
     for(int i =0; i < N; ++i)  
     {  
-        dist[ i ] = V[ start][i];  
-        if(V[start][i] < MAX_COST)  
+		dist[ i ] = find_cost( start,i,valid_vertex,V,start);  
+        if(dist[ i ] < MAX_COST)  
             prev[ i ] = start;  
         else  
             prev[ i ] = -1;       //表示还不知道前一个节点是什么  
@@ -52,10 +61,11 @@ void Dijkstra::dijkstra(int start, int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N)
           
         /*更新dist*/  
         for (int j =0; j < N; j ++)  
-        {  
-            if (s[j] == false && V[u][j] < MAX_COST)  
+        {
+			int uj = find_cost( u,j,valid_vertex,V,start);
+            if (s[j] == false && uj < MAX_COST)  
             {  
-                int temp = dist[ u ] + V[u][j];  
+                int temp = dist[ u ] + uj;  
                 if (temp < dist[ j ])  
                 {  
                     dist[ j ] = temp;  

@@ -17,20 +17,42 @@ void DFS::forward(){
 	candidates_stack.push(*candidates);
 }
 
-vector<id_dis> DFS::get_full_path(int end,int *V,int N){
+vector<id_dis> DFS::get_full_path(int end,int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM],int vertex_num){
 	//用dijkstra方法走完剩余路径，并返回一个路径vector
 }
 
-vector<id_dis>* DFS::get_sorted_candidates(id_dis current,int end,int* V,int N){
+vector<id_dis>* DFS::get_sorted_candidates(id_dis current,int end,int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM],int vertex_num,Floyd &dist){
 	//获得所有的候选节点并排序，优先级越高，位置越后
 	//注意：获取候选节点时，不可行路径剪枝
+	//TODO: 使用连接表优化遍历过程
+	int min_cost = MAX_COST;
+	vector<id_dis> valid_vertex;
+	for(int i=0;i<vertex_num;i++){
+		if(V[current.id][i] != MAX_COST && remain_vertex.count(i) && i != end){
+			if(dist.weight[i][end] == MAX_COST){break;}
+			bool break_flag = false;
+			for(hash_set<int>::iterator iter=remain_including_set.begin();iter!=remain_including_set.end();iter++){
+				if(dist.weight[i][*iter] == MAX_COST){
+					break_flag = true;
+					break;
+				}
+			}
+			if(break_flag){break;}
+		}
+	}
 }
 
-vector<id_dis> DFS::Search(int start, int end,int* V, int N,hash_set<int> including_set)  
+void DFS::Search(int start, int end,int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int vertex_num,hash_set<int> including_set)  
 {  
+	//TODO: 需要添加初始化
 	Floyd dist;
-	dist.initialvector(V,N);
+	dist.initialvector((int*)V,MAX_VERTEX_NUM);
 	dist.floyd();
+	for(hash_set<int>::iterator iter=including_set.begin();iter!=including_set.end();iter++){
+		if(dist.weight[start][*iter] == MAX_COST || dist.weight[start][*iter] == MAX_COST){
+			return;
+		}
+	}
 	remain_including_set = including_set;
 	current_path.push_back(id_dis(start));
 
@@ -38,13 +60,13 @@ vector<id_dis> DFS::Search(int start, int end,int* V, int N,hash_set<int> includ
 		bool backtrack = false;
 		if(remain_including_set.empty()){
 			//已经走完所有中间节点
-			vector<id_dis> current_full_path = get_full_path(end, V, N);
+			vector<id_dis> current_full_path = get_full_path(end, V, vertex_num);
 			if(!current_full_path.empty() && current_full_path.back().dis < best_path->back().dis){
 				best_path = &current_full_path;
 			}
 			backtrack = true;
 		}else{
-			candidates = get_sorted_candidates(current_path.back(),end,V,N);
+			candidates = get_sorted_candidates(current_path.back(),end,V,vertex_num, dist);
 			if(!candidates->empty()){
 				forward();
 			}else{

@@ -62,13 +62,11 @@ vector<id_dis> DFS::Search(int start, int end,int* V, int N,hash_set<int> includ
 			if(!candidates_stack.empty()){
 				candidates = &candidates_stack.top();
 				candidates_stack.pop();
-				if(candidates->empty()){
-					continue;
-				}else{
+				if(!candidates->empty()){
 					forward();
+					break;
 				}
 			}
-			break;
 		}
 	} 
 }  

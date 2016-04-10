@@ -2,9 +2,28 @@
 #include "lib_io.h"
 #include "lib_time.h"
 #include "stdio.h"
+#include "floyd.h"
+#include "Dijkstra.h"
+#include "define.h"
+
+int V[7][7] = {
+	0,1,1,7,7,7,
+	7,0,7,1,7,7,
+	7,7,0,1,1,7,
+	1,7,7,0,7,1,
+	7,7,7,7,0,1,
+	7,7,7,7,7,0
+};
 
 int main(int argc, char *argv[])
 {
+	Floyd test;
+	test.initialvector((int *)V,6);
+	test.floyd();
+
+	Dijkstra test_dijkstra;
+	test_dijkstra.dijkstra(3,(int*)V,6);
+
     //print_time("Begin");
     char *topo[5000];
     int edge_num;

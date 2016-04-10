@@ -1,17 +1,22 @@
-#include "route.h"
-#include "lib_record.h"
 #include <stdio.h>
 #include <hash_set>
 #include <string>
 #include <vector>
+#include "route.h"
+#include "lib_record.h"
+#include "define.h"
+#include "tarjan.h"
+#include <iostream>
+#include <stack>
 
 using namespace std;
 
-int scc[600];
-int scc_order[600];
-int scc_including[600];
-int costs[600][600];
-int edge[600][600];
+int scc[MAX_VERTEX_NUM];
+int scc_order[MAX_VERTEX_NUM];
+int scc_including[MAX_VERTEX_NUM];
+int costs[MAX_VERTEX_NUM][MAX_VERTEX_NUM];
+int edge[MAX_VERTEX_NUM][MAX_VERTEX_NUM];
+int DAG[MAX_VERTEX_NUM][MAX_VERTEX_NUM];
 int start_point;
 int end_point;
 int useful_edge_num;
@@ -62,11 +67,12 @@ void fill_distance(char *topo[5000],int edge_num){
         if(destinationID == start_point){
 			edge_num--;
 			continue;}
+
         linkID = atoi(result[0].c_str());
         cost = atoi(result[3].c_str());
         vertex_set.insert(sourceID);
         vertex_set.insert(destinationID);
-        if(costs[sourceID][destinationID]==0 || costs[sourceID][destinationID] > cost){
+        if(costs[sourceID][destinationID] > cost){
             costs[sourceID][destinationID] = cost;
             edge[sourceID][destinationID] = linkID;
 			if(costs[sourceID][destinationID] > cost){edge_num--;}
@@ -76,9 +82,45 @@ void fill_distance(char *topo[5000],int edge_num){
 }
 
 void search_route(char *topo[5000], int edge_num, char *demand){
+	bool valid;
     unsigned short result[] = {2, 6, 3};
+	init((int*)costs,MAX_VERTEX_NUM);
     fill_demand(demand);
     fill_distance(topo,edge_num);
+	Tarjan tarjan;
+	tarjan.solve(vertex_set.size(),MAX_VERTEX_NUM,(int*)costs);
+	valid = find_DAG_path(vertex_set.size(),tarjan.belong,tarjan.length);
+	if(!valid){return;}
     for (int i = 0; i < 3; i++)
         record_result(result[i]);
+}
+
+void init(int *array,int length){
+	for (int i = 0; i < length; i++)
+		for (int j = 0; j < length; j++)
+		{
+			if(i == j)
+				*array = 0;
+			else
+				*array = MAX_COST;
+			array = array + 1;
+		}
+}
+
+bool find_DAG_path(int length, int *groups,int group_num){
+	hash_set<int> DAG_including_set;
+	//×ª»¯³ÉDAGÍ¼
+	init((int*)DAG,group_num);
+	for(int i=0;i<length;i++){
+		for(int j=0;j<length;j++){
+			if(costs[i][j] == MAX_COST || costs[i][j] == 0){continue;}
+			DAG[groups[i]][groups[j]] = 1;
+		}
+	}
+	for(hash_set<int>::iterator i=including_set.begin();i!=including_set.end();i++){
+		DAG_including_set.insert(groups[*i]);
+	}
+	//find valid path
+	return false;
+
 }

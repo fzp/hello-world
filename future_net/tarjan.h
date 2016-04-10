@@ -5,8 +5,10 @@
 		public:
 			Tarjan();
 			~Tarjan();
-			void Tarjan::solve(int N, int* V);
+			void solve(int l, int N, int* V);
 			int belong[600];
+			int group_num;
+			int length;
 
 		private:
 			int LOW[600];
@@ -14,6 +16,7 @@
 			int instack[600];
 			int Stap[600];
 			int Dindex,Bcnt,Stop;
-			void Tarjan::tarjan(int i, int N, int* V);
+			void tarjan(int i, int N, int* V);
+			void get_group_num();
 	};
 #endif

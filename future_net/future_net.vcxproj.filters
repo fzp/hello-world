@@ -27,6 +27,18 @@
     <ClCompile Include="tarjan.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="floyd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Dijkstra.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="transform.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DFS.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="route.h">
@@ -45,6 +57,21 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="unistd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="floyd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Dijkstra.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DFS.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

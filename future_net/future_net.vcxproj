@@ -76,17 +76,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DFS.cpp" />
+    <ClCompile Include="Dijkstra.cpp" />
+    <ClCompile Include="floyd.cpp" />
     <ClCompile Include="future_net.cpp" />
     <ClCompile Include="io.cpp" />
     <ClCompile Include="route.cpp" />
     <ClCompile Include="tarjan.cpp" />
+    <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="define.h" />
+    <ClInclude Include="DFS.h" />
+    <ClInclude Include="Dijkstra.h" />
+    <ClInclude Include="floyd.h" />
     <ClInclude Include="lib_io.h" />
     <ClInclude Include="lib_record.h" />
     <ClInclude Include="lib_time.h" />
     <ClInclude Include="route.h" />
     <ClInclude Include="tarjan.h" />
+    <ClInclude Include="transform.h" />
     <ClInclude Include="unistd.h" />
   </ItemGroup>
   <ItemGroup>

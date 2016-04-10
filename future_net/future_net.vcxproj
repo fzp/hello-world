@@ -83,7 +83,6 @@
     <ClCompile Include="io.cpp" />
     <ClCompile Include="route.cpp" />
     <ClCompile Include="tarjan.cpp" />
-    <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h" />
@@ -95,7 +94,6 @@
     <ClInclude Include="lib_time.h" />
     <ClInclude Include="route.h" />
     <ClInclude Include="tarjan.h" />
-    <ClInclude Include="transform.h" />
     <ClInclude Include="unistd.h" />
   </ItemGroup>
   <ItemGroup>

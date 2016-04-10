@@ -1,8 +1,10 @@
 #include "DFS.h"
 #include "define.h"
 #include "floyd.h"
+#include "Dijkstra.h"
 #include <vector>
 #include <stack>
+
 
 bool cmp(id_dis a, id_dis b)
 {
@@ -19,46 +21,61 @@ void DFS::forward(){
 
 vector<id_dis> DFS::get_full_path(int end,int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM],int vertex_num){
 	//用dijkstra方法走完剩余路径，并返回一个路径vector
+
+	int current_start = current_path.back().id;
+	Dijkstra min_path;
+	for(vector<id_dis>::iterator i = current_path.begin();i!=current_path.end();i++)
+	{
+		for(int j =0;j<vertex_num;j++)
+		{
+			if(i->id!=j)
+			{
+				V[i->id][j] = MAX_COST;
+				V[j][i->id] = MAX_COST;
+			}
+		}
+	}
+    min_path.dijkstra(current_start,V,vertex_num);
+	
+	vector<id_dis> remain_path;
+
+	while(end != -1 && end != current_start)
+	{
+		id_dis pre_v(end);
+		pre_v.dis = min_path.dist[end]+current_path.back().dis;
+		remain_path.push_back(pre_v);
+		end = min_path.prev[end];
+	}
+	
+	for(vector<id_dis>::reverse_iterator i = current_path.rbegin();i!=current_path.rend();i++)
+	{
+		remain_path.push_back(*i);
+	}
+	reverse(remain_path.begin(),remain_path.end());
+	return remain_path;
+
+
+
 }
 
 vector<id_dis>* DFS::get_sorted_candidates(id_dis current,int end,int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM],int vertex_num,Floyd &dist){
 	//获得所有的候选节点并排序，优先级越高，位置越后
 	//注意：获取候选节点时，不可行路径剪枝
 	//TODO: 使用连接表优化遍历过程
+	int min_cost = MAX_COST;
 	vector<id_dis> valid_vertex;
 	for(int i=0;i<vertex_num;i++){
 		if(V[current.id][i] != MAX_COST && remain_vertex.count(i) && i != end){
 			if(dist.weight[i][end] == MAX_COST){break;}
-			bool break_flag = false;	
-			int min_cost = MAX_COST;
-			int min_cost_id;
-			int current_cost = V[current.id][i] + current.dis;
+			bool break_flag = false;
 			for(hash_set<int>::iterator iter=remain_including_set.begin();iter!=remain_including_set.end();iter++){
 				if(dist.weight[i][*iter] == MAX_COST){
 					break_flag = true;
 					break;
 				}
-				//下面作为启发函数如何？
-				//int predicted_cost = dist.weight[i][*iter]+dist.weight[*iter][end];
-				int predicted_cost = dist.weight[i][*iter];
-				if(dist.weight[i][*iter] < min_cost){
-					min_cost = dist.weight[i][*iter];
-				}
-				if(!best_path->empty()){
-					int predicted_cost = current_cost + dist.weight[i][*iter]+dist.weight[*iter][end];
-					if(predicted_cost > best_path->back().dis){
-						break_flag = true;
-						break;
-					}
-				}
 			}
 			if(break_flag){break;}
-			valid_vertex.push_back(id_dis(i,V[current.id][i]+min_cost));
 		}
-	}
-	sort(valid_vertex.begin(),valid_vertex.end(),cmp);
-	for(vector<id_dis>::iterator iter=valid_vertex.begin();iter!=valid_vertex.end();iter++){
-		iter->dis = current.dis+V[current.id][iter->id];
 	}
 }
 

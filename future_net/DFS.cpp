@@ -25,20 +25,40 @@ vector<id_dis>* DFS::get_sorted_candidates(id_dis current,int end,int V[MAX_VERT
 	//获得所有的候选节点并排序，优先级越高，位置越后
 	//注意：获取候选节点时，不可行路径剪枝
 	//TODO: 使用连接表优化遍历过程
-	int min_cost = MAX_COST;
 	vector<id_dis> valid_vertex;
 	for(int i=0;i<vertex_num;i++){
 		if(V[current.id][i] != MAX_COST && remain_vertex.count(i) && i != end){
 			if(dist.weight[i][end] == MAX_COST){break;}
-			bool break_flag = false;
+			bool break_flag = false;	
+			int min_cost = MAX_COST;
+			int min_cost_id;
+			int current_cost = V[current.id][i] + current.dis;
 			for(hash_set<int>::iterator iter=remain_including_set.begin();iter!=remain_including_set.end();iter++){
 				if(dist.weight[i][*iter] == MAX_COST){
 					break_flag = true;
 					break;
 				}
+				//下面作为启发函数如何？
+				//int predicted_cost = dist.weight[i][*iter]+dist.weight[*iter][end];
+				int predicted_cost = dist.weight[i][*iter];
+				if(dist.weight[i][*iter] < min_cost){
+					min_cost = dist.weight[i][*iter];
+				}
+				if(!best_path->empty()){
+					int predicted_cost = current_cost + dist.weight[i][*iter]+dist.weight[*iter][end];
+					if(predicted_cost > best_path->back().dis){
+						break_flag = true;
+						break;
+					}
+				}
 			}
 			if(break_flag){break;}
+			valid_vertex.push_back(id_dis(i,V[current.id][i]+min_cost));
 		}
+	}
+	sort(valid_vertex.begin(),valid_vertex.end(),cmp);
+	for(vector<id_dis>::iterator iter=valid_vertex.begin();iter!=valid_vertex.end();iter++){
+		iter->dis = current.dis+V[current.id][iter->id];
 	}
 }
 

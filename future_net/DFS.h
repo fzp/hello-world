@@ -34,6 +34,10 @@ class id_dis
 			this->id = id;
 			this->dis = 0;
 		};
+		id_dis(int id,int dis){
+			this->id = id;
+			this->dis = dis;
+		};
 		int id;
 		int dis;
 };

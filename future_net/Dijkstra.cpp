@@ -9,7 +9,7 @@ Dijkstra::~Dijkstra()
 {
 }
 
-void Dijkstra::dijkstra(int start, int* V, int N)
+void Dijkstra::dijkstra(int start, int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N)
 {
 	vector<bool> s;                 //是否已经在S集合中  
 	s.reserve(0);  
@@ -18,8 +18,8 @@ void Dijkstra::dijkstra(int start, int* V, int N)
    /*初始化dist和prev数组*/  
     for(int i =0; i < N; ++i)  
     {  
-        dist[ i ] = V[ start*N + i ];  
-        if(V[ start*N + i ] < MAX_COST)  
+        dist[ i ] = V[ start][i];  
+        if(V[start][i] < MAX_COST)  
             prev[ i ] = start;  
         else  
             prev[ i ] = -1;       //表示还不知道前一个节点是什么  
@@ -53,9 +53,9 @@ void Dijkstra::dijkstra(int start, int* V, int N)
         /*更新dist*/  
         for (int j =0; j < N; j ++)  
         {  
-            if (s[j] == false && V[u*N +j] < MAX_COST)  
+            if (s[j] == false && V[u][j] < MAX_COST)  
             {  
-                int temp = dist[ u ] + V[u*N + j ];  
+                int temp = dist[ u ] + V[u][j];  
                 if (temp < dist[ j ])  
                 {  
                     dist[ j ] = temp;  

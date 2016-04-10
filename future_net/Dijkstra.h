@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <stack>
+#include "define.h"
 
 using namespace std;
 
@@ -13,10 +14,10 @@ using namespace std;
 			Dijkstra();
 			~Dijkstra();
 
-			int dist[600];
-			int prev[600];
+			int dist[MAX_VERTEX_NUM];
+			int prev[MAX_VERTEX_NUM];
 
-			void dijkstra(int start, int* V, int N);
+			void dijkstra(int start, int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N);
 
 		private:
 			

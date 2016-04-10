@@ -46,7 +46,7 @@ void DFS::Search(int start, int end,int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int v
 {  
 	//TODO: 需要添加初始化
 	Floyd dist;
-	dist.initialvector((int*)V,MAX_VERTEX_NUM);
+	dist.initialvector(V,vertex_num);
 	dist.floyd();
 	for(hash_set<int>::iterator iter=including_set.begin();iter!=including_set.end();iter++){
 		if(dist.weight[start][*iter] == MAX_COST || dist.weight[start][*iter] == MAX_COST){
@@ -76,6 +76,7 @@ void DFS::Search(int start, int end,int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int v
 		while(backtrack){
 			//当前路径回溯
 			id_dis back_track_vertex = current_path.back();
+			current_path.erase(current_path.end()-1);
 			remain_vertex.insert(back_track_vertex.id);
 			if(including_set.count(back_track_vertex.id)){
 				remain_including_set.insert(back_track_vertex.id);

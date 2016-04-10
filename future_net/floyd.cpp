@@ -1,5 +1,4 @@
 #include "floyd.h"
-#include "define.h"
 
 Floyd::Floyd(){
 }
@@ -8,7 +7,7 @@ Floyd::~Floyd()
 {
 }
 
-void Floyd::initialvector(int *V, int N){  
+void Floyd::initialvector(int V[MAX_VERTEX_NUM][MAX_VERTEX_NUM], int N){  
 	vertexnum = N;
 	weight.resize(vertexnum);//路径权重数组  
 	path.resize(vertexnum);//保存最短路径数组,记录前继  
@@ -25,9 +24,9 @@ void Floyd::initialvector(int *V, int N){
 				weight[from][to] = 0;
 				path[from][to] = from;
 			}
-			else if(V[from * vertexnum + to]>0)
+			else if(V[from][to]>0)
 			{
-				weight[from][to] = V[from * vertexnum + to];
+				weight[from][to] = V[from][to];
 				path[from][to] = from;
 			}
 			else
